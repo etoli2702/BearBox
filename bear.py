@@ -1,6 +1,7 @@
 import pygame
 import sys
 from InputHandler import InputHandler
+from box import Box
  
 # define a main function
 def main():
@@ -17,7 +18,8 @@ def main():
      
     # define a variable to control the main loop
     running = True
-    x = False
+    b = Box()
+    b.action()
 
     inputHandler = InputHandler()
      
