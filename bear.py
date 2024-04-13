@@ -66,12 +66,14 @@ class BearBox:
 
     i = 0
     def render(self):
-        BearBox.screen.blit(pygame.image.load("assets/white.png"), (0,0))
+        background = pygame.image.load("assets/background.png")
+        background = pygame.transform.scale(background, pygame.display.get_window_size())
 
-        BearBox.i += 5
-        self.activeBox.rotate(BearBox.i)
+        BearBox.screen.blit(background, (0,0))
+
         self.activeBox.render()
-        
+        self.activeHud.render(10)
+
         pygame.display.flip()
 
     @staticmethod
