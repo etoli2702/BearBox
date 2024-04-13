@@ -2,11 +2,15 @@ import pygame
 import sys
 from InputHandler import InputHandler
 
+
+
 def getScreen():
     return BearBox.screen
 
 def getWindowSize():
     return BearBox.windowSize
+import box
+from hud import Healthbar
 
 import box
 import BoxElement
@@ -23,6 +27,7 @@ class BearBox:
     def __init__(self):
         self.inputHandler = InputHandler()
         self.activeBox: box.Box
+        self.activeHud = Healthbar
 
     def run(self):
         # initialize the pygame module
@@ -34,6 +39,9 @@ class BearBox:
         
         self.activeBox = box.Box()
         self.activeBox.action()
+        self.activeHud = Healthbar()
+
+
 
         inputHandler = InputHandler()
         
@@ -62,6 +70,7 @@ class BearBox:
         BearBox.screen.blit(pygame.image.load("assets/white.png"), (0,0))
 
         self.activeBox.render()
+        self.activeHud.render(10)
 
         latch = BoxElement.BoxElement(1, "latch_left")
         latch2 = BoxElement.BoxElement(1, "latch_left")
