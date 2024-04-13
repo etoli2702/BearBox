@@ -35,5 +35,3 @@ class Timer:
     def update (self, game_time):
         if self.running:
             self.elapsed_time += 1
-    
-    

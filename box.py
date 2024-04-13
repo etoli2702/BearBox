@@ -73,14 +73,10 @@ class Box:
         spriteRect.centery = self.yRange[0] + (self.yRange[1] - self.yRange[0])/2
 
         screen.blit(p, spriteRect)
-        """q = pygame.image.load(self.latchLeft)
-        q = pygame.transform.scale(q, (windowSize[0] / 16, windowSize[1] / 5))
-        screen.blit(q, (windowSize[0] / 3, windowSize[1] / 4))
-        r = pygame.image.load(self.latchRight)
-        r = pygame.transform.scale(r, (windowSize[0] / 16, windowSize[1] / 5))
-        screen.blit(r, (windowSize[0] / 1.65, windowSize[1] / 4))"""
 
         for element in self.elements:
             element.render()
+
+        
 
 
