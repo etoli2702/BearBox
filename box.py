@@ -36,7 +36,6 @@ class Box:
             self.health -= 10
             self.taken = True
         
-
     def checkHealth(self):
         if self.health <= 0:
             return False
@@ -46,6 +45,15 @@ class Box:
         if (self.taken):
             return False
         return True
+    
+    def bounce(self):
+        pass
+
+    def roll(self):
+        pass
+
+    def click(self, xPosition, yPosition):
+        pass
 
 
     

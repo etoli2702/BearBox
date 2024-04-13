@@ -80,6 +80,7 @@ class InputHandler:
         if not self.isCircling:
             return False
         
+        # If the distance between the current mouse position and where it started is less
         hasMouseReturnedToStartPosition = Vector2(mouse.get_pos()[0] - self.dragStartPos[0], mouse.get_pos()[1] - self.dragStartPos[1]).length() <= MAX_MOUSE_POSITION_DISTANCE
 
         hasMouseLeftStartPosition = Vector2(self.dragBoundingBox[0] - self.dragBoundingBox[2], self.dragBoundingBox[1] - self.dragBoundingBox[3]).length() >= REQUIRED_DISTANCE_FOR_CIRCLE
