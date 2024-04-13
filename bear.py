@@ -1,8 +1,13 @@
 import pygame
 import sys
 from InputHandler import InputHandler
+import warnings
 import box
 import BoxElement
+
+# Suppress libpng warning
+warnings.filterwarnings("ignore", category=UserWarning, message="iCCP")
+
 
 def getScreen():
     return BearBox.screen
@@ -12,27 +17,42 @@ def getWindowSize():
 import box
 from hud import Healthbar
 
+import box
+import BoxElement
+from start import Title
+
 # define a main function
 def main():
     game = BearBox()
     game.run()
      
 class BearBox:
-    windowSize = [800,600]
+    windowSize = [1920,1080]
     screen = pygame.display.set_mode((windowSize[0], windowSize[1]))
 
     def __init__(self):
         self.inputHandler = InputHandler()
         self.activeBox: box.Box
         self.activeHud = Healthbar
+        self.start = Title
 
     def run(self):
         # initialize the pygame module
         pygame.init()
-        logo = pygame.image.load("assets/white.png")
+        logo = pygame.image.load("assets/background.png")
         pygame.display.set_icon(logo)
         pygame.display.set_caption("test")
         # load and set the logo
+        self.start = Title()
+        y = False
+        while not(self.start.confirm) and not y:
+            self.start.checkPress()
+            self.start.render()
+            pygame.display.flip()
+            if (BearBox.shouldQuit()):
+                y = True
+
+            
         
         defaultElements = [BoxElement.BoxElement(1, "latch_left", None, (-110, -87), (55, 110)),
                            BoxElement.BoxElement(1, "latch_right", None, (110, -87), (55, 110))]
@@ -45,7 +65,7 @@ class BearBox:
         inputHandler = InputHandler()
         
         # main loop
-        while not BearBox.shouldQuit():
+        while not BearBox.shouldQuit() and not y:
             inputHandler.update()
             if inputHandler.hasMadeCircle():
                 print("CIRCLE COMPLETE!")

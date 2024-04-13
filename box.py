@@ -2,6 +2,7 @@ import pygame
 import bear
 import BoxElement
 
+
 class Box:
     def __init__(self, stage = 1, boxSize = [200,150,600,450], elements: list[BoxElement.BoxElement] = []):
         self.face = "front"

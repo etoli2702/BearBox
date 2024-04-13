@@ -8,6 +8,7 @@ Purpose: Render the healthbar.
 import pygame
 from bear import getScreen, getWindowSize
 
+
 class Healthbar:
     def __init__(self):
         pass
