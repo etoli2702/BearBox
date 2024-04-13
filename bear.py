@@ -16,10 +16,10 @@ class BearBox:
     def run(self):
         # initialize the pygame module
         pygame.init()
-        # load and set the logo
         logo = pygame.image.load("assets/white.png")
         pygame.display.set_icon(logo)
         pygame.display.set_caption("test")
+        # load and set the logo
         
         # create a surface on screen that has the size of 240 x 180
         self.screen = pygame.display.set_mode((800, 600))
@@ -33,10 +33,6 @@ class BearBox:
         
         # main loop
         while running:
-            self.screen.blit(logo, (0,0))
-            # event handling, gets all event from the event queue
-            pygame.display.flip()
-
             inputHandler.update()
             #print("IsCircling", inputHandler.isCircling)
             #print("CCW", inputHandler.isCounterClockwiseCircle)
@@ -46,11 +42,18 @@ class BearBox:
             if inputHandler.hasDoneBounce():
                 print("BOUNCE COMPLETE!")
 
+            if inputHandler.consumeClick():
+                print("Clicked!")
+
+            self.render()
+
     def render(self):
+        
+        self.screen.blit(pygame.image.load("assets/white.png"), (0,0))
+        pygame.display.flip()
+
         self.activeBox.render()
-     
-# run the main function only if this module is executed as the main script
-# (if you import this as a module then nothing is executed)
+
 if __name__=="__main__":
     # call the main function
     main()
