@@ -44,33 +44,22 @@ class InputHandler:
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # Left mouse button
-                    self.isDragging = True
-                    dragJustStarted = True
-                    self.isCircling = True
-                    self.dragBoundingBox = (mouse.get_pos()[0], mouse.get_pos()[1], mouse.get_pos()[0], mouse.get_pos()[1])
                     self.mouseDownTime = time.process_time()
+                    self.startDrag()
 
             elif event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
-                    self.isDragging = False
+                    self.endDrag()
                     if time.process_time() - self.mouseDownTime < MAX_MOUSE_DOWN_TIME_FOR_CLICK_SECONDS:
                         self.hasClicked = True
 
 
         if self.isDragging:
-            if dragJustStarted:
-                self.dragStartPos = mouse.get_pos()
-                self.lastMousePos = mouse.get_pos()
-
             # Calculate data about whether it is circling. Only does this one in seven updates to make it more lenient.
-            elif self.updateCount % 7 == 0:
+            if self.updateCount % 7 == 0:
                 self.updateCircling()
             
             self.updateDragBoundingBox()
-        else:
-            self.isCircling = False
-            self.lastDragVector = None
-            self.lastDragCross = nan
 
     def updateCircling(self):
         """Updates the status as to if the player is circling their mouse.
@@ -115,18 +104,42 @@ class InputHandler:
         return hasMouseLeftStartPosition and hasMouseReturnedToStartPosition
     
     def hasDoneBounce(self) -> bool:
-        if not self.isDragging or self.isCircling:
+        if (not self.isDragging) or self.isCircling:
             return False
 
-        hasMouseReturnedToStartPosition = self.dragStartPos[1] - mouse.get_pos()[1] <= MAX_MOUSE_POSITION_DISTANCE
+        # If the mouse is lower than where the bounce started.
+        hasMouseReturnedToStartPosition = self.dragStartPos[1] < mouse.get_pos()[1]
 
         hasMouseLeftStartPosition = self.dragBoundingBox[3] - self.dragBoundingBox[1] >= REQUIRED_DISTANCE_FOR_CIRCLE
 
         return hasMouseLeftStartPosition and hasMouseReturnedToStartPosition
     
-    def consumeClick(self) -> bool:
+    def consumeClick(self) -> "tuple[int, int] | None":
+        """Returns the click position if the player has clicked since the last time the game checked, or None otherwise.
+
+        Also updates self.hasClicked to False.
+        Returns:
+            tuple[int, int] | None: Ths click position if the player has clicked since the last time this function was called, or None otherwise.
+        """
         if self.hasClicked:
             self.hasClicked = False
-            return True
+            return self.dragStartPos
         
-        return False
+        return None
+    
+    def startDrag(self):
+        self.dragStartPos = mouse.get_pos()
+        self.lastMousePos = mouse.get_pos()
+        self.isDragging = True
+        self.isCircling = True
+        self.dragBoundingBox = (mouse.get_pos()[0], mouse.get_pos()[1], mouse.get_pos()[0], mouse.get_pos()[1])
+
+    def endDrag(self):
+        self.isCircling = False
+        self.isDragging = False
+        self.lastDragVector = None
+        self.lastDragCross = nan
+
+    def restartDrag(self):
+        self.endDrag()
+        self.startDrag()
