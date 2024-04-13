@@ -1,5 +1,6 @@
 import pygame
 import sys
+from InputHandler import InputHandler
  
 # define a main function
 def main():
@@ -17,28 +18,18 @@ def main():
     # define a variable to control the main loop
     running = True
     x = False
+
+    inputHandler = InputHandler()
      
     # main loop
     while running:
         screen.blit(logo, (0,0))
         # event handling, gets all event from the event queue
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                # change the value to False, to exit the main loop
-                running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                # Get the position of the mouse click
-                mouse_pos = pygame.mouse.get_pos()
-                print(mouse_pos)
-                x = True
-            elif event.type == pygame.MOUSEBUTTONUP:
-                # Get the position of the mouse click
-                x = False
-            elif event.type == pygame.MOUSEMOTION and x:
-                # Check for drag
-                mouse_pos = pygame.mouse.get_pos()
-                print(mouse_pos)
         pygame.display.flip()
+
+        inputHandler.update()
+        print("IsCircling", inputHandler.isCircling)
+        print("CCW", inputHandler.isCounterClockwiseCircle)
      
      
 # run the main function only if this module is executed as the main script
