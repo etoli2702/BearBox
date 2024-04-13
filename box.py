@@ -1,19 +1,23 @@
 import pygame
 
 class Box:
-    def __init__(self, stage = 1, boxSize = [100,100], latchSize = [100,100]):
+    def __init__(self, stage = 1, boxSize = [200,150,600,450], latchSize1 = [270,150,315,270], latchSize2 = [490,150,530,270]):
         self.face = "front"
         self.health = 100
-        self.latch = "assets/box_" + stage + "/latch_right.png"
-        self.image = "assets/box_" + stage + "/box_" + stage + ".png"
-        self.hurt = "assets/box_" + stage + "/box_" + stage + "damage.png"
-        self.xRange = [0,boxSize[0]]
-        self.yRange = [0,boxSize[1]]
-        self.xLatch = [0,latchSize[0]]
-        self.yLatch = [0,latchSize[1]]
+        self.latchLeft = "assets/box_" + str(stage) + "/latch_left.png"
+        self.latchRight = "assets/box_" + str(stage) + "/latch_right.png"
+        self.image = "assets/box_" + str(stage) + "/box_" + str(stage) + ".png"
+        self.hurt = "assets/box_" + str(stage) + "/box_" + str(stage) + "_damage.png"
+        self.xRange = [boxSize[0],boxSize[2]]
+        self.yRange = [boxSize[1],boxSize[3]]
+        self.xLatchLeft = [latchSize1[0],latchSize1[2]]
+        self.yLatchLeft = [latchSize1[1],latchSize1[3]]
+        self.xLatchRight = [latchSize1[0],latchSize1[2]]
+        self.yLatchRight = [latchSize1[1],latchSize1[3]]
         self.taken = False
-        pygame.image.load(self.image)
-        pygame.image.load(self.latch)
+        p = pygame.image.load(self.image)
+        p = pygame.transform.scale(p, (50,50))
+
         pygame.image.load(self.hurt)
 
     def setDirection(self, dir = "front"):
