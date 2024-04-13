@@ -54,13 +54,14 @@ class Box:
         pass
 
     def click(self, xPosition, yPosition):
-        pass
+        if (self.xRange[0] < xPosition < self.xRange[1] and self.yRange[0] < yPosition < self.yRange[1]):
+            print("Clicked on the box!")
 
     def render(self):
         screen = getScreen()
         windowSize = getWindowSize()
         p = pygame.image.load(self.image)
-        p = p = pygame.transform.scale(p, (windowSize[0] / 2, windowSize[1] / 2))
+        p = pygame.transform.scale(p, (windowSize[0] / 2, windowSize[1] / 2))
         screen.blit(p, (windowSize[0] / 4, windowSize[1] / 4))
         q = pygame.image.load(self.latchLeft)
         q = pygame.transform.scale(q, (windowSize[0] / 16, windowSize[1] / 5))

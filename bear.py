@@ -1,13 +1,15 @@
 import pygame
 import sys
 from InputHandler import InputHandler
-import box
 
 def getScreen():
     return BearBox.screen
 
 def getWindowSize():
     return BearBox.windowSize
+
+import box
+import BoxElement
 
 # define a main function
 def main():
@@ -49,15 +51,29 @@ class BearBox:
             clickPostion = inputHandler.consumeClick()
             if not (clickPostion is None):
                 print(f"Player clicked at {clickPostion}")
+                self.activeBox.click(clickPostion[0], clickPostion[1])
 
             self.render()
 
         pygame.quit()
 
+    i = 0
     def render(self):
         BearBox.screen.blit(pygame.image.load("assets/white.png"), (0,0))
 
         self.activeBox.render()
+
+        latch = BoxElement.BoxElement(1, "latch_left")
+        latch2 = BoxElement.BoxElement(1, "latch_left")
+        BearBox.i+=5
+        latch.setOrigin(400, 300)
+        latch.offset(100, -200)
+        latch.rotate(BearBox.i)
+        latch.render()
+        latch2.setOrigin(400, 300)
+        latch2.offset(-100, -200)
+        latch2.rotate(BearBox.i)
+        latch2.render()
         
         pygame.display.flip()
 
