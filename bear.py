@@ -1,15 +1,14 @@
 import pygame
 import sys
 from InputHandler import InputHandler
+import box
+import BoxElement
 
 def getScreen():
     return BearBox.screen
 
 def getWindowSize():
     return BearBox.windowSize
-
-import box
-import BoxElement
 
 # define a main function
 def main():
@@ -32,7 +31,9 @@ class BearBox:
         pygame.display.set_caption("test")
         # load and set the logo
         
-        self.activeBox = box.Box()
+        defaultElements = [BoxElement.BoxElement(1, "latch_left", None, (-110, -87), (55, 110)),
+                           BoxElement.BoxElement(1, "latch_right", None, (110, -87), (55, 110))]
+        self.activeBox = box.Box(elements=defaultElements)
         self.activeBox.action()
 
         inputHandler = InputHandler()
@@ -61,19 +62,9 @@ class BearBox:
     def render(self):
         BearBox.screen.blit(pygame.image.load("assets/white.png"), (0,0))
 
+        BearBox.i += 5
+        self.activeBox.rotate(BearBox.i)
         self.activeBox.render()
-
-        latch = BoxElement.BoxElement(1, "latch_left")
-        latch2 = BoxElement.BoxElement(1, "latch_left")
-        BearBox.i+=5
-        latch.setOrigin(400, 300)
-        latch.offset(100, -200)
-        latch.rotate(BearBox.i)
-        latch.render()
-        latch2.setOrigin(400, 300)
-        latch2.offset(-100, -200)
-        latch2.rotate(BearBox.i)
-        latch2.render()
         
         pygame.display.flip()
 
