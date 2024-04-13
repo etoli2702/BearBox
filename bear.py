@@ -69,7 +69,7 @@ class BearBox:
                 print("CIRCLE COMPLETE!")
                 if self.activeBox.contains(inputHandler.dragStartPos[0], inputHandler.dragStartPos[1]):
                     print("Roll")
-                    self.activeBox.roll()
+                    self.activeBox.roll(inputHandler.isCounterClockwiseCircle)
                 inputHandler.restartDrag()
 
             if inputHandler.hasDoneBounce():

@@ -27,6 +27,11 @@ class BoxElement:
     def click(self, positionX, positionY):
         rads = radians(self.rotation)
 
+        screenSizeScale = (
+            pygame.display.get_window_size()[0]/800,
+            pygame.display.get_window_size()[1]/600
+        )
+
         scale = (
             pygame.display.get_window_size()[0]/800 * self.scale[0],
             pygame.display.get_window_size()[0]/600 * self.scale[1]
@@ -34,8 +39,11 @@ class BoxElement:
         
         # The elements may be offset and rotated from (0,0). Instead of trying to figure out if the click point is in that bounding box directly, we instead
         # apply the inverse of those transforms to the point and see if is as the (importantly non-rotated) bounding box centered at (0, 0)
-        inversePositionX = positionX - (self.parent.xRange[0] + (self.parent.xRange[1] - self.parent.xRange[0])/2 + self.offsetY * sin(rads) + self.offsetX * cos(rads))
-        inversePositionY = positionY - (self.parent.yRange[0] + (self.parent.yRange[1] - self.parent.yRange[0])/2 - self.offsetX * sin(rads) + self.offsetY * cos(rads))
+        parentXRange  = self.parent.getScaledXRange()
+        parentYRange  = self.parent.getScaledYRange()
+
+        inversePositionX = positionX - (parentXRange[0] + (parentXRange[1] - parentXRange[0])/2 + screenSizeScale[1]*self.offsetY * sin(rads) + screenSizeScale[0]*self.offsetX * cos(rads))
+        inversePositionY = positionY - (parentYRange[0] + (parentYRange[1] - parentYRange[0])/2 - screenSizeScale[0]*self.offsetX * sin(rads) + screenSizeScale[1]*self.offsetY * cos(rads))
 
         return -scale[0]/2 < inversePositionX < scale[0]/2 and -scale[1]/2 < inversePositionY < scale[1]/2
     
@@ -62,7 +70,10 @@ class BoxElement:
 
         rads = radians(self.rotation)
 
-        spriteRect.centerx = self.parent.xRange[0] + (self.parent.xRange[1] - self.parent.xRange[0])/2 + screenSizeScale[0]*(self.offsetY * sin(rads) + self.offsetX * cos(rads))
-        spriteRect.centery = self.parent.yRange[0] + (self.parent.yRange[1] - self.parent.yRange[0])/2 - screenSizeScale[1]-(self.offsetX * sin(rads) + self.offsetY * cos(rads))
+        parentXRange  = self.parent.getScaledXRange()
+        parentYRange  = self.parent.getScaledYRange()
+
+        spriteRect.centerx = parentXRange[0] + (parentXRange[1] - parentXRange[0])/2 + screenSizeScale[1]*self.offsetY * sin(rads) + screenSizeScale[0]*self.offsetX * cos(rads)
+        spriteRect.centery = parentYRange[0] + (parentYRange[1] - parentYRange[0])/2 - screenSizeScale[0]*self.offsetX * sin(rads) + screenSizeScale[1]*self.offsetY * cos(rads)
 
         screen.blit(sprite, spriteRect)

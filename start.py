@@ -17,7 +17,6 @@ class Title:
     
     def checkPress(self):
         mouse = pygame.mouse.get_pos()
-        print(mouse)
         for event in pygame.event.get():
             if (event.type == pygame.MOUSEBUTTONDOWN):
                 if (self.location[0] < mouse[0] < self.location[2] and self.location[1] < mouse[1] < self.location[3]):
