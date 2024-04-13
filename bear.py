@@ -34,25 +34,25 @@ class BearBox:
         # main loop
         while running:
             inputHandler.update()
-            #print("IsCircling", inputHandler.isCircling)
-            #print("CCW", inputHandler.isCounterClockwiseCircle)
             if inputHandler.hasMadeCircle():
                 print("CIRCLE COMPLETE!")
+                inputHandler.restartDrag()
 
             if inputHandler.hasDoneBounce():
                 print("BOUNCE COMPLETE!")
+                inputHandler.restartDrag()
 
-            if inputHandler.consumeClick():
-                print("Clicked!")
+            clickPostion = inputHandler.consumeClick()
+            if not (clickPostion is None):
+                print(f"Player clicked at {clickPostion}")
 
             self.render()
 
     def render(self):
-        
         self.screen.blit(pygame.image.load("assets/white.png"), (0,0))
         pygame.display.flip()
 
-        self.activeBox.render()
+        # self.activeBox.render()
 
 if __name__=="__main__":
     # call the main function
