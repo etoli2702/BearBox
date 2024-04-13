@@ -12,8 +12,6 @@ warnings.filterwarnings("ignore", category=UserWarning, message="iCCP")
 def getScreen():
     return BearBox.screen
 
-def getWindowSize():
-    return BearBox.windowSize
 import box
 from hud import Healthbar
 
@@ -27,8 +25,7 @@ def main():
     game.run()
      
 class BearBox:
-    windowSize = [1920,1080]
-    screen = pygame.display.set_mode((windowSize[0], windowSize[1]))
+    screen = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
 
     def __init__(self):
         self.inputHandler = InputHandler()

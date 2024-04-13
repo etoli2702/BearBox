@@ -2,24 +2,19 @@ import pygame
 import bear
 import BoxElement
 
-
 class Box:
     def __init__(self, stage = 1, boxSize = [200,150,600,450], elements: list[BoxElement.BoxElement] = []):
         self.face = "front"
         self.health = 100
         self.image = "assets/box_" + str(stage) + "/box_" + str(stage) + ".png"
         self.hurt = "assets/box_" + str(stage) + "/box_" + str(stage) + "_damage.png"
-        self.xRange = [boxSize[0],boxSize[2]]
-        self.yRange = [boxSize[1],boxSize[3]]
+        self.xRange = [item * pygame.display.get_window_size()[0]/800 for item in [boxSize[0],boxSize[2]]]
+        self.yRange = [item * pygame.display.get_window_size()[1]/600 for item in [boxSize[1],boxSize[3]]]
         self.rotation = 0
         self.elements = elements
         for element in elements:
             element.setParent(self)
         self.taken = False
-        p = pygame.image.load(self.image)
-        p = pygame.transform.scale(p, (50,50))
-
-        pygame.image.load(self.hurt)
 
     def setDirection(self, dir = "front"):
         # Sets the side of the box
@@ -63,7 +58,7 @@ class Box:
 
     def render(self):
         screen = bear.getScreen()
-        windowSize = bear.getWindowSize()
+        windowSize = pygame.display.get_window_size()
         p = pygame.image.load(self.image)
         p = pygame.transform.scale(p, (windowSize[0] / 2, windowSize[1] / 2))
         p = pygame.transform.rotate(p, self.rotation)

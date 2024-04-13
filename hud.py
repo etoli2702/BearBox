@@ -6,7 +6,7 @@ Last modified: 04/13/2024
 Purpose: Render the healthbar.
 '''
 import pygame
-from bear import getScreen, getWindowSize
+from bear import getScreen
 
 
 class Healthbar:
@@ -21,12 +21,12 @@ class Healthbar:
         
     def render(self, global_health):
         screen = getScreen()
-        windowSize = getWindowSize()
+        windowSize = pygame.display.get_window_size()
         healthbar = self.currentHealth(global_health)
         for index, item in enumerate(healthbar):
             image = pygame.image.load(item)
             image = pygame.transform.scale(image, (int(windowSize[0] / 12), int(windowSize[1] / 12)))  
-            screen.blit(image, (25 + index * 60, 50))  
+            screen.blit(image, ((10 + index * 60)*windowSize[0]/800, 50 * windowSize[1]/600))
 
 class Timer:
     def __init___ (self):

@@ -1,5 +1,5 @@
 import pygame
-from bear import getScreen, getWindowSize
+from bear import getScreen
 import warnings
 
 # Suppress libpng warning
@@ -17,7 +17,7 @@ class Title:
     
     def checkPress(self):
         mouse = pygame.mouse.get_pos()
-        print(mouse)
+        #print(mouse)
         for event in pygame.event.get():
             if (event.type == pygame.MOUSEBUTTONDOWN):
                 if (self.location[0] < mouse[0] < self.location[2] and self.location[1] < mouse[1] < self.location[3]):
@@ -30,7 +30,7 @@ class Title:
 
     def render(self):
         screen = getScreen()
-        windowSize =getWindowSize()
+        windowSize = pygame.display.get_window_size()
         screen.blit(pygame.image.load("assets/background.png"), (0,0))
         
         if (self.isPress):
