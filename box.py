@@ -1,4 +1,5 @@
 import pygame
+from bear import getScreen, getWindowSize
 
 class Box:
     def __init__(self, stage = 1, boxSize = [200,150,600,450], latchSize1 = [270,150,315,270], latchSize2 = [490,150,530,270]):
@@ -55,7 +56,17 @@ class Box:
     def click(self, xPosition, yPosition):
         pass
 
-
-    
+    def render(self):
+        screen = getScreen()
+        windowSize = getWindowSize()
+        p = pygame.image.load(self.image)
+        p = p = pygame.transform.scale(p, (windowSize[0] / 2, windowSize[1] / 2))
+        screen.blit(p, (windowSize[0] / 4, windowSize[1] / 4))
+        q = pygame.image.load(self.latchLeft)
+        q = pygame.transform.scale(q, (windowSize[0] / 16, windowSize[1] / 5))
+        screen.blit(q, (windowSize[0] / 3, windowSize[1] / 4))
+        r = pygame.image.load(self.latchRight)
+        r = pygame.transform.scale(r, (windowSize[0] / 16, windowSize[1] / 5))
+        screen.blit(r, (windowSize[0] / 1.65, windowSize[1] / 4))
 
 

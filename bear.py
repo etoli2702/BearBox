@@ -1,18 +1,26 @@
 import pygame
 import sys
 from InputHandler import InputHandler
-from box import Box
- 
-windowSize = [800,600]
+import box
+
+def getScreen():
+    return BearBox.screen
+
+def getWindowSize():
+    return BearBox.windowSize
+
 # define a main function
 def main():
     game = BearBox()
     game.run()
      
 class BearBox:
+    windowSize = [800,600]
+    screen = pygame.display.set_mode((windowSize[0], windowSize[1]))
+
     def __init__(self):
         self.inputHandler = InputHandler()
-        self.activeBox: Box
+        self.activeBox: box.Box
 
     def run(self):
         # initialize the pygame module
@@ -21,19 +29,8 @@ class BearBox:
         pygame.display.set_icon(logo)
         pygame.display.set_caption("test")
         # load and set the logo
- 
-
-        self.screen = pygame.display.set_mode((windowSize[0], windowSize[1]))
         
-<<<<<<< HEAD
-        # define a variable to control the main loop
-        running = True
-=======
-        # create a surface on screen that has the size of 240 x 180
-        self.screen = pygame.display.set_mode((800, 600))
-        
->>>>>>> 474b0f3ef28a1a6da7d542a4f0e031e7b556aa3e
-        self.activeBox = Box()
+        self.activeBox = box.Box()
         self.activeBox.action()
 
         inputHandler = InputHandler()
@@ -53,32 +50,16 @@ class BearBox:
             if not (clickPostion is None):
                 print(f"Player clicked at {clickPostion}")
 
-            self.render(self.activeBox)
+            self.render()
 
-<<<<<<< HEAD
-    def render(self, box):
-        
-=======
         pygame.quit()
 
     def render(self):
->>>>>>> 474b0f3ef28a1a6da7d542a4f0e031e7b556aa3e
-        self.screen.blit(pygame.image.load("assets/white.png"), (0,0))
-        p = pygame.image.load(box.image)
-        p = p = pygame.transform.scale(p, (windowSize[0] / 2, windowSize[1] / 2))
-        self.screen.blit(p, (windowSize[0] / 4, windowSize[1] / 4))
-        q = pygame.image.load(box.latchLeft)
-        q = pygame.transform.scale(q, (windowSize[0] / 16, windowSize[1] / 5))
-        self.screen.blit(q, (windowSize[0] / 3, windowSize[1] / 4))
-        r = pygame.image.load(box.latchRight)
-        r = pygame.transform.scale(r, (windowSize[0] / 16, windowSize[1] / 5))
-        self.screen.blit(r, (windowSize[0] / 1.65, windowSize[1] / 4))
-        pygame.display.flip()
+        BearBox.screen.blit(pygame.image.load("assets/white.png"), (0,0))
 
-<<<<<<< HEAD
-=======
-        # self.activeBox.render()
->>>>>>> 474b0f3ef28a1a6da7d542a4f0e031e7b556aa3e
+        self.activeBox.render()
+        
+        pygame.display.flip()
 
     @staticmethod
     def shouldQuit():
