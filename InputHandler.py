@@ -35,24 +35,7 @@ class InputHandler:
     def update(self):
         self.updateCount += 1
 
-        # If this is the first update in a drag motion
-        dragJustStarted = False
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:  # Left mouse button
-                    self.mouseDownTime = time.process_time()
-                    self.startDrag()
-
-            elif event.type == pygame.MOUSEBUTTONUP:
-                if event.button == 1:
-                    self.endDrag()
-                    if time.process_time() - self.mouseDownTime < MAX_MOUSE_DOWN_TIME_FOR_CLICK_SECONDS:
-                        self.hasClicked = True
-
+        self.checkMouseState()
 
         if self.isDragging:
             # Calculate data about whether it is circling. Only does this one in seven updates to make it more lenient.
@@ -143,3 +126,20 @@ class InputHandler:
     def restartDrag(self):
         self.endDrag()
         self.startDrag()
+
+    def checkMouseState(self):
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:  # Left mouse button
+                    self.startDrag()
+
+                    # Set the time that the mouse was pressed
+                    self.mouseDownTime = time.process_time()
+
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:
+                    self.endDrag()
+
+                    # If the amount of time since the button was pressed is less than the max time,
+                    if time.process_time() - self.mouseDownTime < MAX_MOUSE_DOWN_TIME_FOR_CLICK_SECONDS:
+                        self.hasClicked = True
