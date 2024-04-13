@@ -39,6 +39,7 @@ class BearBox:
         logo = pygame.image.load("assets/background.png")
         pygame.display.set_icon(logo)
         pygame.display.set_caption("test")
+        pygame.time.Clock().tick(60)
         # load and set the logo
         self.start = Title()
         y = False
@@ -66,6 +67,9 @@ class BearBox:
             inputHandler.update()
             if inputHandler.hasMadeCircle():
                 print("CIRCLE COMPLETE!")
+                if self.activeBox.contains(inputHandler.dragStartPos[0], inputHandler.dragStartPos[1]):
+                    print("Roll")
+                    self.activeBox.roll()
                 inputHandler.restartDrag()
 
             if inputHandler.hasDoneBounce():
@@ -77,6 +81,7 @@ class BearBox:
                 print(f"Player clicked at {clickPostion}")
                 self.activeBox.click(clickPostion[0], clickPostion[1])
 
+            self.activeBox.update()
             self.render()
 
         pygame.quit()

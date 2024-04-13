@@ -2,6 +2,8 @@ import pygame
 import bear
 import BoxElement
 
+ROLL_FRAMES = 60
+
 class Box:
     def __init__(self, stage = 1, boxSize = [200,150,600,450], elements: list[BoxElement.BoxElement] = []):
         self.face = "front"
@@ -15,6 +17,9 @@ class Box:
         for element in elements:
             element.setParent(self)
         self.taken = False
+
+        self.rolling = False
+        self.rollFrames = 0
 
     def setDirection(self, dir = "front"):
         # Sets the side of the box
@@ -47,7 +52,7 @@ class Box:
         pass
 
     def roll(self):
-        pass
+        self.rolling = True
 
     def click(self, xPosition, yPosition):
         for element in self.elements:
@@ -55,6 +60,18 @@ class Box:
                 print(f"Clicked on {element.spritePath}")
         if (self.xRange[0] < xPosition < self.xRange[1] and self.yRange[0] < yPosition < self.yRange[1]):
             print("Clicked on the box!")
+
+    def contains(self, xPosition, yPosition):
+        return self.xRange[0] < xPosition < self.xRange[1] and self.yRange[0] < yPosition < self.yRange[1]
+
+    def update(self):
+        if self.rolling:
+            if self.rollFrames < ROLL_FRAMES:
+                self.rotate(360/ROLL_FRAMES * self.rollFrames)
+            else:
+                self.rollFrames = 0
+                self.rolling = False
+                self.rotate(0)
 
     def render(self):
         screen = bear.getScreen()

@@ -1,5 +1,5 @@
 import pygame
-from bear import getScreen, getWindowSize
+from bear import getScreen
 import warnings
 
 # Suppress libpng warning
@@ -13,7 +13,7 @@ class Title:
         self.press = "assets/start2.png"
         self.isPress = False
         self.confirm = False
-        self.location = [getWindowSize()[0] / 2.43,getWindowSize()[1] / 1.2,getWindowSize()[0] / 1.78,getWindowSize()[0] / 1.1]
+        self.location = [pygame.display.get_window_size()[0] / 2.43,pygame.display.get_window_size()[1] / 1.2,pygame.display.get_window_size()[0] / 1.78,pygame.display.get_window_size()[0] / 1.1]
     
     def checkPress(self):
         mouse = pygame.mouse.get_pos()
@@ -35,7 +35,7 @@ class Title:
 
     def render(self):
         screen = getScreen()
-        windowSize = getWindowSize()
+        windowSize = pygame.display.get_window_size()
         screen.blit(pygame.image.load("assets/background.png"), (0,0))
         
         if (self.isPress):
