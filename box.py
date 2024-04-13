@@ -54,6 +54,9 @@ class Box:
         pass
 
     def click(self, xPosition, yPosition):
+        for element in self.elements:
+            if(element.click(xPosition, yPosition)):
+                print(f"Clicked on {element.spritePath}")
         if (self.xRange[0] < xPosition < self.xRange[1] and self.yRange[0] < yPosition < self.yRange[1]):
             print("Clicked on the box!")
 

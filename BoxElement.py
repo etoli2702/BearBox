@@ -15,6 +15,14 @@ class BoxElement:
     def update(self):
         pass
 
+    def click(self, positionX, positionY):
+        rads = radians(self.rotation)
+        
+        inversePositionX = positionX - (self.parent.xRange[0] + (self.parent.xRange[1] - self.parent.xRange[0])/2 + self.offsetY * sin(rads) + self.offsetX * cos(rads))
+        inversePositionY = positionY - (self.parent.yRange[0] + (self.parent.yRange[1] - self.parent.yRange[0])/2 - self.offsetX * sin(rads) + self.offsetY * cos(rads))
+
+        return -self.scale[0]/2 < inversePositionX < self.scale[0]/2 and -self.scale[1]/2 < inversePositionY < self.scale[1]/2
+    
     def setParent(self, parent: "box.Box"):
         self.parent = parent
 
