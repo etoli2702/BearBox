@@ -28,8 +28,10 @@ def main():
         pygame.display.flip()
 
         inputHandler.update()
-        print("IsCircling", inputHandler.isCircling)
-        print("CCW", inputHandler.isCounterClockwiseCircle)
+        #print("IsCircling", inputHandler.isCircling)
+        #print("CCW", inputHandler.isCounterClockwiseCircle)
+        if inputHandler.hasMadeCircle():
+            print("CIRCLE COMPLETE!")
      
      
 # run the main function only if this module is executed as the main script

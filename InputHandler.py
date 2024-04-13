@@ -1,12 +1,22 @@
 import pygame
 from pygame.math import Vector2
+import pygame.mouse as mouse
 from math import nan, isnan
+
+# The maximim distance before two mouse postions are said to be the same
+MAX_MOUSE_POSITION_DISTANCE = 50
+
+# The distance that the mouse has to move from its original position before it can be said to have made a circle
+REQUIRED_DISTANCE_FOR_CIRCLE = 200
 
 class InputHandler:
     def __init__(self):
         self.isDragging = False # Whether the player is currently dragging the mouse
         self.isCircling = False # Whether the player is making a circle with their mouse
         self.isCounterClockwiseCircle = False # If the player is dragging their mouse counterclockwise
+
+        # The max bounds of the current drag. (minX, minY, maxX, maxY)
+        self.dragBoundingBox: tuple[int, int, int, int]
 
         self.dragStartPos: tuple[int, int] = (0, 0) # The position that the current drag started at
         self.lastMousePos = None # The position of the mouse when we last updated
@@ -31,6 +41,7 @@ class InputHandler:
                     self.isDragging = True
                     dragJustStarted = True
                     self.isCircling = True
+                    self.dragBoundingBox = (mouse.get_pos()[0], mouse.get_pos()[1], mouse.get_pos()[0], mouse.get_pos()[1])
 
             elif event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
@@ -39,12 +50,14 @@ class InputHandler:
 
         if self.isDragging:
             if dragJustStarted:
-                self.dragStartPos = pygame.mouse.get_pos()
-                self.lastMousePos = pygame.mouse.get_pos()
+                self.dragStartPos = mouse.get_pos()
+                self.lastMousePos = mouse.get_pos()
 
             # Calculate data about whether it is circling. Only does this one in seven updates to make it more lenient.
             elif self.updateCount % 7 == 0:
                 self.updateCircling()
+            
+            self.updateDragBoundingBox()
         else:
             self.isCircling = False
             self.lastDragVector = None
@@ -57,8 +70,8 @@ class InputHandler:
         Recall that the cross product is positive if two vectors are counterclockwise, and if they are clockwise. As such, if the above cross product and the
         one before it are the same sign, the player is circling their mouse.
         """
-        newDragVector = Vector2(pygame.mouse.get_pos()[0] - self.lastMousePos[0], pygame.mouse.get_pos()[1] - self.lastMousePos[1])
-        self.lastMousePos = pygame.mouse.get_pos()
+        newDragVector = Vector2(mouse.get_pos()[0] - self.lastMousePos[0], mouse.get_pos()[1] - self.lastMousePos[1])
+        self.lastMousePos = mouse.get_pos()
 
         # If the last drag vector is none, we cannot compute the cross product so we just return
         if self.lastDragVector is None:
@@ -74,3 +87,20 @@ class InputHandler:
         
         self.lastDragCross = thisCross
         self.lastDragVector = newDragVector
+
+    def updateDragBoundingBox(self):
+        self.dragBoundingBox = (
+            min(self.dragBoundingBox[0], mouse.get_pos()[0]),
+            min(self.dragBoundingBox[1], mouse.get_pos()[1]),
+            max(self.dragBoundingBox[2], mouse.get_pos()[0]),
+            max(self.dragBoundingBox[3], mouse.get_pos()[1]))
+
+    def hasMadeCircle(self) -> bool:
+        if not self.isCircling:
+            return False
+        
+        hasMouseReturnedToStartPosition = Vector2(mouse.get_pos()[0] - self.dragStartPos[0], mouse.get_pos()[1] - self.dragStartPos[1]).length() <= MAX_MOUSE_POSITION_DISTANCE
+
+        hasMouseLeftStartPosition = Vector2(self.dragBoundingBox[0] - self.dragBoundingBox[2], self.dragBoundingBox[1] - self.dragBoundingBox[3]).length() >= REQUIRED_DISTANCE_FOR_CIRCLE
+
+        return hasMouseLeftStartPosition and hasMouseReturnedToStartPosition
