@@ -2,12 +2,16 @@ import pygame
 from pygame.math import Vector2
 import pygame.mouse as mouse
 from math import nan, isnan
+import time
 
 # The maximim distance before two mouse postions are said to be the same
 MAX_MOUSE_POSITION_DISTANCE = 50
 
 # The distance that the mouse has to move from its original position before it can be said to have made a circle
 REQUIRED_DISTANCE_FOR_CIRCLE = 200
+
+# The maximum length, in seconds, for a mouse input to be considered a click
+MAX_MOUSE_DOWN_TIME_FOR_CLICK_SECONDS = 0.2
 
 class InputHandler:
     def __init__(self):
@@ -23,8 +27,10 @@ class InputHandler:
         self.lastDragVector: Vector2 = None # In the last update, the vector from the previous mouse position to the current one
         self.lastDragCross = nan # The cross product of the lastDragVector and the vector before it
 
-        self.updateCount = 0 # The number of times this has been updated
+        self.mouseDownTime = 0 # The time at which the mouse was pressed
+        self.hasClicked = False # Whether the mouse has been clicked since the game loop last checked
 
+        self.updateCount = 0 # The number of times this has been updated
 
     def update(self):
         self.updateCount += 1
@@ -42,10 +48,13 @@ class InputHandler:
                     dragJustStarted = True
                     self.isCircling = True
                     self.dragBoundingBox = (mouse.get_pos()[0], mouse.get_pos()[1], mouse.get_pos()[0], mouse.get_pos()[1])
+                    self.mouseDownTime = time.process_time()
 
             elif event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
                     self.isDragging = False
+                    if time.process_time() - self.mouseDownTime < MAX_MOUSE_DOWN_TIME_FOR_CLICK_SECONDS:
+                        self.hasClicked = True
 
 
         if self.isDragging:
@@ -114,3 +123,10 @@ class InputHandler:
         hasMouseLeftStartPosition = self.dragBoundingBox[3] - self.dragBoundingBox[1] >= REQUIRED_DISTANCE_FOR_CIRCLE
 
         return hasMouseLeftStartPosition and hasMouseReturnedToStartPosition
+    
+    def consumeClick(self) -> bool:
+        if self.hasClicked:
+            self.hasClicked = False
+            return True
+        
+        return False
