@@ -34,6 +34,9 @@ def main():
         #print("CCW", inputHandler.isCounterClockwiseCircle)
         if inputHandler.hasMadeCircle():
             print("CIRCLE COMPLETE!")
+
+        if inputHandler.hasDoneBounce():
+            print("BOUNCE COMPLETE!")
      
      
 # run the main function only if this module is executed as the main script

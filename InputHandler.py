@@ -104,3 +104,13 @@ class InputHandler:
         hasMouseLeftStartPosition = Vector2(self.dragBoundingBox[0] - self.dragBoundingBox[2], self.dragBoundingBox[1] - self.dragBoundingBox[3]).length() >= REQUIRED_DISTANCE_FOR_CIRCLE
 
         return hasMouseLeftStartPosition and hasMouseReturnedToStartPosition
+    
+    def hasDoneBounce(self) -> bool:
+        if not self.isDragging or self.isCircling:
+            return False
+
+        hasMouseReturnedToStartPosition = self.dragStartPos[1] - mouse.get_pos()[1] <= MAX_MOUSE_POSITION_DISTANCE
+
+        hasMouseLeftStartPosition = self.dragBoundingBox[3] - self.dragBoundingBox[1] >= REQUIRED_DISTANCE_FOR_CIRCLE
+
+        return hasMouseLeftStartPosition and hasMouseReturnedToStartPosition
