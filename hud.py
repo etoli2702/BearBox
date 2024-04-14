@@ -44,14 +44,14 @@ class Timers:
         self.elapsed_time = (time.process_time() - self.start)
         
         self.sec = round(self.elapsed_time)
-        if self.sec >= 60:
+        while self.sec >= 60:
             self.sec -= 60
         self.min = floor(self.elapsed_time / 60)
 
     def render(self):
         font = pygame.font.Font('ps2p.ttf', 32)        
         windowSize = pygame.display.get_window_size()
-        if self.sec < 50:
+        if self.elapsed_time < 50:
             text = font.render(f"{self.min:02}:{self.sec:02}", True, (255, 255, 255))
         else:
             text = font.render(f"{self.min:02}:{self.sec:02}", True, (255, 0, 0))

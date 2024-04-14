@@ -211,8 +211,6 @@ class BearBox:
             else:
                 win = True
 
-
-
     @staticmethod
     def shouldQuit():
         return len(pygame.event.get(pygame.QUIT)) > 0
