@@ -166,8 +166,7 @@ class BearBox:
         self.activeBox.render()
         self.timer.render()
 
-        #''' # Bear function
-
+        # Bear pounce
         screen = getScreen()
         windowSize = pygame.display.get_window_size()
 
@@ -175,8 +174,6 @@ class BearBox:
 
         p = pygame.transform.scale(p, (windowSize[0] / 1, windowSize[1] / 1))
         screen.blit(p, (windowSize[0] / 300, windowSize[1] / pounce))
-        
-        #'''
 
         #Global health calculation
         i = self.activeBox.health
