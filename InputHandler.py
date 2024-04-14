@@ -30,12 +30,14 @@ class InputHandler:
         self.mouseDownTime = 0 # The time at which the mouse was pressed
         self.hasClicked = False # Whether the mouse has been clicked since the game loop last checked
 
+        self.hasSpacePress = False
+
         self.updateCount = 0 # The number of times this has been updated
 
     def update(self):
         self.updateCount += 1
 
-        self.checkMouseState()
+        self.checkInputs()
 
         if self.isDragging:
             # Calculate data about whether it is circling. Only does this one in seven updates to make it more lenient.
@@ -88,7 +90,7 @@ class InputHandler:
         return hasMouseLeftStartPosition and hasMouseReturnedToStartPosition
     
     def hasDoneBounce(self) -> bool:
-        if (not self.isDragging) or self.isCircling:
+        if (not self.isDragging) or self.dragBoundingBox[2] - self.dragBoundingBox[0] >= self.dragBoundingBox[3] - self.dragBoundingBox[1]:
             return False
 
         # If the mouse is lower than where the bounce started.
@@ -111,6 +113,12 @@ class InputHandler:
         
         return None
     
+    def consumeSpace(self) -> bool:
+        if self.hasSpacePress:
+            self.hasSpacePress = False
+            return True
+        return False
+    
     def startDrag(self):
         self.dragStartPos = mouse.get_pos()
         self.lastMousePos = mouse.get_pos()
@@ -128,7 +136,7 @@ class InputHandler:
         self.endDrag()
         self.startDrag()
 
-    def checkMouseState(self):
+    def checkInputs(self):
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # Left mouse button
@@ -144,3 +152,7 @@ class InputHandler:
                     # If the amount of time since the button was pressed is less than the max time,
                     if time.process_time() - self.mouseDownTime < MAX_MOUSE_DOWN_TIME_FOR_CLICK_SECONDS:
                         self.hasClicked = True
+            
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    self.hasSpacePress = True

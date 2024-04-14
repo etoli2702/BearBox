@@ -1,11 +1,13 @@
 import pygame
 import bear
 import BoxElement
+from math import cos, pi
 
-ROLL_FRAMES = 60
+ROLL_FRAMES = 20
+BOUNCE_FRAMES = 20
 
 class Box:
-    def __init__(self, stage = 1, boxSize = [200,150,600,450], elements: list[BoxElement.BoxElement] = []):
+    def __init__(self, stage = 1, boxSize = [200,200,600,600], elements: list[BoxElement.BoxElement] = []):
         self.face = "front"
         self.health = 40
         self.image = "assets/box_" + str(stage) + "/box_" + str(stage) + ".png"
@@ -22,6 +24,10 @@ class Box:
         self.rollCounterClockwise = False
         self.rollFrames = 0
 
+        self.ogYRange = []
+        self.bouncing = False
+        self.bounceFrames = 0
+
     def setDirection(self, dir = "front"):
         # Sets the side of the box
         self.face = dir
@@ -31,10 +37,9 @@ class Box:
         for element in self.elements:
             element.rotate(rotation)
 
-    def damage(self, location = [0,0]):
-        xRangeScaled = self.getScaledXRange()
-        yRangeScaled = self.getScaledYRange()
-        # if (xRangeScaled[0] < location[0] < xRangeScaled[1]) and (yRangeScaled[0] < location[1] < yRangeScaled[1]):
+    def damage(self):
+        if self.health <= 0:
+            return
         self.health -= 1
         self.taken = True
 
@@ -42,7 +47,7 @@ class Box:
         return [item/800*pygame.display.get_window_size()[0] for item in self.xRange]
     
     def getScaledYRange(self):
-        return [item/600*pygame.display.get_window_size()[1] for item in self.xRange]
+        return [item/600*pygame.display.get_window_size()[1] for item in self.yRange]
         
     def checkHealth(self):
         if self.health <= 0:
@@ -55,26 +60,28 @@ class Box:
         return True
     
     def bounce(self):
-        pass
+        if self.bouncing:
+            return
+        self.bouncing = True and not self.rolling
+        if self.bouncing:
+            self.ogYRange = self.yRange
 
     def roll(self, counterclockwise: bool):
-        self.rolling = True
+        self.rolling = True and not self.bouncing
         self.rollCounterClockwise = counterclockwise
 
     def click(self, xPosition, yPosition):
         for element in self.elements:
             if(element.click(xPosition, yPosition)):
                 print(f"Clicked on {element.spritePath}")
-                if element.health >= 0:
-                    element.damage()
+                element.damage()
                 return
         
         xRangeScaled = self.getScaledXRange()
         yRangeScaled = self.getScaledYRange()
         if (xRangeScaled[0] < xPosition < xRangeScaled[1]) and (yRangeScaled[0] < yPosition < yRangeScaled[1]):
             print("Clicked on the box!")
-            if self.health >= 0:
-                self.damage()
+            self.damage()
 
     def contains(self, xPosition, yPosition):
         xRangeScaled = self.getScaledXRange()
@@ -84,12 +91,23 @@ class Box:
     def update(self):
         if self.rolling:
             self.rollFrames += 1
-            if self.rollFrames < ROLL_FRAMES:
+            if self.rollFrames <= ROLL_FRAMES:
                 self.rotate(360/ROLL_FRAMES * self.rollFrames * (1 if self.rollCounterClockwise else -1))
             else:
                 self.rollFrames = 0
                 self.rolling = False
                 self.rotate(0)
+        elif self.bouncing:
+            if self.bounceFrames <= BOUNCE_FRAMES:
+                heightDelta = 50 * cos(pi * self.bounceFrames/BOUNCE_FRAMES)
+                self.yRange = [item - heightDelta for item in self.yRange]
+                self.rotate(360/BOUNCE_FRAMES * self.bounceFrames)
+            else:
+                self.bounceFrames = 0
+                self.bouncing = False
+                self.rotate(0)
+                self.yRange = self.ogYRange
+            self.bounceFrames += 1
 
     def render(self):
         screen = bear.getScreen()

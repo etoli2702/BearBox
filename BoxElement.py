@@ -28,6 +28,8 @@ class BoxElement:
         pass
 
     def damage(self):
+            if self.health <= 0:
+                return
             self.health -= 1
             self.taken = True
 

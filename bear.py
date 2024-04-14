@@ -54,8 +54,7 @@ class BearBox:
                 self.start.checkPress()
                 self.start.render()
                 pygame.display.flip()
-                if (BearBox.shouldQuit()):
-                    gamerun = True
+        gamerun = True
 
             
         
@@ -70,17 +69,25 @@ class BearBox:
         inputHandler = InputHandler()
         
         # main loop
-        while not BearBox.shouldQuit() and not gamerun:
+        while (not BearBox.shouldQuit()) and gamerun:
             inputHandler.update()
             if inputHandler.hasMadeCircle():
                 print("CIRCLE COMPLETE!")
                 if self.activeBox.contains(inputHandler.dragStartPos[0], inputHandler.dragStartPos[1]):
                     print("Roll")
                     self.activeBox.roll(inputHandler.isCounterClockwiseCircle)
+                    self.activeBox.damage()
+                    self.activeBox.damage()
+                    self.activeBox.damage()
+                    self.activeBox.damage()
                 inputHandler.restartDrag()
 
             if inputHandler.hasDoneBounce():
                 print("BOUNCE COMPLETE!")
+                self.activeBox.bounce()
+                self.activeBox.damage()
+                for element in self.activeBox.elements:
+                    element.damage()
                 inputHandler.restartDrag()
 
             clickPostion = inputHandler.consumeClick()
@@ -93,6 +100,7 @@ class BearBox:
             for element in defaultElements:
                 i += element.health
             global_health = i
+            print(global_health)
             if global_health == 0:
                 gamerun = False
 
