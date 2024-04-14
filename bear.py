@@ -3,6 +3,7 @@ from InputHandler import InputHandler
 import warnings
 import box
 import BoxElement
+stage = 2
 
 # Suppress libpng warning
 warnings.filterwarnings("ignore", category=UserWarning, message="iCCP")
@@ -58,9 +59,9 @@ class BearBox:
 
             
         
-        defaultElements = [BoxElement.BoxElement(1, "latch_left", None, (-110, -87), (55, 110)),
-                           BoxElement.BoxElement(1, "latch_right", None, (110, -87), (55, 110))]
-        self.activeBox = box.Box(elements=defaultElements)
+        defaultElements = [BoxElement.BoxElement(stage, "latch_left", None, (-110, -87), (55, 110)),
+                           BoxElement.BoxElement(stage, "latch_right", None, (110, -87), (55, 110))]
+        self.activeBox = box.Box(stage=stage, elements=defaultElements)
         self.activeBox.action()
         self.activeHud = Healthbar()
 
