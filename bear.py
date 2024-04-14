@@ -101,7 +101,9 @@ class BearBox:
         BearBox.screen.blit(background, (0,0))
 
         self.activeBox.render()
-        self.activeHud.render(10)
+        
+        global_health = self.activeBox.health
+        self.activeHud.render(global_health)
 
         pygame.display.flip()
 

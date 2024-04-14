@@ -21,9 +21,14 @@ class BoxElement:
         self.rotation = 0
         self.parent = parent
         self.health = 20
+        self.taken = False
 
     def update(self):
         pass
+
+    def damage(self):
+            self.health -= 1
+            self.taken = True
 
     def click(self, positionX, positionY):
         rads = radians(self.rotation)

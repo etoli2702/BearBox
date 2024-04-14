@@ -34,9 +34,9 @@ class Box:
     def damage(self, location = [0,0]):
         xRangeScaled = self.getScaledXRange()
         yRangeScaled = self.getScaledYRange()
-        if (xRangeScaled[0] < location[0] < xRangeScaled[1]) and (yRangeScaled[0] < location[1] < yRangeScaled[1]):
-            self.health -= 1
-            self.taken = True
+        # if (xRangeScaled[0] < location[0] < xRangeScaled[1]) and (yRangeScaled[0] < location[1] < yRangeScaled[1]):
+        self.health -= 1
+        self.taken = True
 
     def getScaledXRange(self):
         return [item/800*pygame.display.get_window_size()[0] for item in self.xRange]
@@ -65,12 +65,14 @@ class Box:
         for element in self.elements:
             if(element.click(xPosition, yPosition)):
                 print(f"Clicked on {element.spritePath}")
-                return
+                self.element.damage(xPosition,yPosition)
+                return element
         
         xRangeScaled = self.getScaledXRange()
         yRangeScaled = self.getScaledYRange()
         if (xRangeScaled[0] < xPosition < xRangeScaled[1]) and (yRangeScaled[0] < yPosition < yRangeScaled[1]):
             print("Clicked on the box!")
+            self.damage()
 
     def contains(self, xPosition, yPosition):
         xRangeScaled = self.getScaledXRange()
@@ -90,7 +92,11 @@ class Box:
     def render(self):
         screen = bear.getScreen()
         windowSize = pygame.display.get_window_size()
-        p = pygame.image.load(self.image)
+        if self.taken:
+            p = pygame.image.load(self.hurt)
+            self.taken = False
+        else:
+            p = pygame.image.load(self.image)
         p = pygame.transform.scale(p, (windowSize[0] / 2, windowSize[1] / 2))
         p = pygame.transform.rotate(p, self.rotation)
 
