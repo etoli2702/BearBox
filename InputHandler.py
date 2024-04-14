@@ -49,7 +49,7 @@ class InputHandler:
 
         if self.isDragging:
             # Calculate data about whether it is circling. Only does this one in seven updates to make it more lenient.
-            if self.updateCount % 7 == 0:
+            if self.updateCount % 5 == 0:
                 self.updateCircling()
             
             self.updateDragBoundingBox()

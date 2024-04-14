@@ -151,6 +151,7 @@ class Box:
                 self.bouncing = False
                 self.rotate(0)
                 self.yRange = self.ogYRange
+                return
             self.bounceFrames += 1
 
     def render(self):

@@ -45,11 +45,14 @@ class BearBox:
         pygame.display.set_icon(logo)
         pygame.display.set_caption("test")
         pygame.time.Clock().tick(60)
-        # load and set the logo
-        i = 0
+        
+        self.startFromTitle()
+
+        pygame.quit()
+
+    def startFromTitle(self):
         gamerun = False
 
-            
         while not BearBox.shouldQuit():
             # Title Screen 
             self.start = Title()
@@ -74,6 +77,7 @@ class BearBox:
                 boxNo = 2
             else:
                 pygame.quit()
+                return
                              
             # build boxes
             defaultElements = [BoxElement.BoxElement(stage, "latch_left", None, (-110, -87), (55, 110)),
@@ -90,6 +94,7 @@ class BearBox:
             while not gamerun:
                 if (BearBox.shouldQuit()):
                         pygame.quit()
+                        return
                 inputHandler.update()
                 if inputHandler.hasMadeCircle():
                     print("CIRCLE COMPLETE!")
@@ -128,12 +133,10 @@ class BearBox:
                     gamerun = False
                     # Win screen
                     self.wins()
+                    self.startFromTitle()
 
                 self.activeBox.update()
                 self.render(global_health)
-
-
-        pygame.quit()
     
     def title(self):
         while not(self.start.confirm) and not BearBox.shouldQuit():
@@ -147,6 +150,7 @@ class BearBox:
                     pygame.display.flip()
                     if (BearBox.shouldQuit()):
                         pygame.quit()
+                        return
 
     def render(self, global_health):
         background = pygame.image.load("assets/background.png")
