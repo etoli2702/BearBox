@@ -42,10 +42,10 @@ class BearBox:
         pygame.time.Clock().tick(60)
         # load and set the logo
         self.start = Title()
-        y = False
+        gamerun = False
 
         # Title Screen
-        while not(self.start.confirm) and not y:
+        while not(self.start.confirm) and not gamerun:
                 if pygame.event.get(pygame.VIDEORESIZE):
                     newSize = pygame.display.get_surface().get_size()
                     if newSize:
@@ -55,7 +55,7 @@ class BearBox:
                 self.start.render()
                 pygame.display.flip()
                 if (BearBox.shouldQuit()):
-                    y = True
+                    gamerun = True
 
             
         
@@ -70,7 +70,7 @@ class BearBox:
         inputHandler = InputHandler()
         
         # main loop
-        while not BearBox.shouldQuit() and not y:
+        while not BearBox.shouldQuit() and not gamerun:
             inputHandler.update()
             if inputHandler.hasMadeCircle():
                 print("CIRCLE COMPLETE!")
@@ -88,21 +88,25 @@ class BearBox:
                 print(f"Player clicked at {clickPostion}")
                 self.activeBox.click(clickPostion[0], clickPostion[1])
 
+            i = self.activeBox.health
+            for element in defaultElements:
+                i += element.health
+            global_health = i
+            if global_health == 0:
+                gamerun = False
+
             self.activeBox.update()
-            self.render()
+            self.render(global_health)
 
         pygame.quit()
 
-    i = 0
-    def render(self):
+    def render(self, global_health):
         background = pygame.image.load("assets/background.png")
         background = pygame.transform.scale(background, pygame.display.get_window_size())
 
         BearBox.screen.blit(background, (0,0))
 
         self.activeBox.render()
-        
-        global_health = self.activeBox.health
         self.activeHud.render(global_health)
 
         pygame.display.flip()
