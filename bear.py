@@ -109,6 +109,11 @@ class BearBox:
             self.activeBox.update()
             self.render(global_health, gamerun)
 
+        win = True
+        while win and not BearBox.shouldQuit():
+            win = self.wins()
+
+
         pygame.quit()
 
     def render(self, global_health, gamerun):
@@ -124,6 +129,27 @@ class BearBox:
 
         pygame.display.flip()
         pygame.time.Clock().tick(60)
+
+    def wins(self):
+
+        screen = getScreen()
+        windowSize = pygame.display.get_window_size()
+
+        screen.fill((255, 255, 255))
+
+
+        p = pygame.image.load("assets/win.png")
+            
+        p = pygame.transform.scale(p, (windowSize[0] / 2, windowSize[1] / 2))
+        screen.blit(p, (windowSize[0] / 4, windowSize[1] / 4))
+        pygame.display.flip()
+
+        mouse_state = pygame.mouse.get_pressed()
+        if mouse_state[0]:
+            return False
+        return True
+
+
 
     @staticmethod
     def shouldQuit():

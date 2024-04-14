@@ -51,7 +51,10 @@ class Timers:
     def render(self):
         font = pygame.font.Font('ps2p.ttf', 32)        
         windowSize = pygame.display.get_window_size()
-        text = font.render(f"{self.min:02}:{self.sec:02}", True, (255, 255, 255))
+        if self.sec < 50:
+            text = font.render(f"{self.min:02}:{self.sec:02}", True, (255, 255, 255))
+        else:
+            text = font.render(f"{self.min:02}:{self.sec:02}", True, (255, 0, 0))
 
         screen = getScreen()
         screen.blit(text, ((10 * 60)*windowSize[0]/800, 50 * windowSize[1]/600))
