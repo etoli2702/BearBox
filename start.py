@@ -13,10 +13,16 @@ class Title:
         self.press = "assets/start2.png"
         self.isPress = False
         self.confirm = False
-        self.location = [pygame.display.get_window_size()[0] / 2.43,pygame.display.get_window_size()[1] / 1.2,pygame.display.get_window_size()[0] / 1.78,pygame.display.get_window_size()[0] / 1.1]
+        self.location = [330,500,450,545] 
+
+    def update_location(self, window_size):
+        # Update self.location based on the new window size
+        if window_size:
+            self.location = [window_size[0] / 2.43, window_size[1] / 1.2, window_size[0] / 1.78, window_size[0] / 1.1]
     
     def checkPress(self):
         mouse = pygame.mouse.get_pos()
+        print(mouse)
         for event in pygame.event.get():
             if (event.type == pygame.MOUSEBUTTONDOWN):
                 if (self.location[0] < mouse[0] < self.location[2] and self.location[1] < mouse[1] < self.location[3]):
@@ -24,7 +30,7 @@ class Title:
             elif(event.type == pygame.MOUSEMOTION):
                 if (self.location[0] > mouse[0] or mouse[0] > self.location[2] 
                     or self.location[1] > mouse[1] or mouse[1] > self.location[3]):
-                    self.isPress = False    
+                    self.isPress = False
             elif(self.isPress):
                 self.isPress = False
                 self.confirm = True

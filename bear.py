@@ -1,5 +1,4 @@
 import pygame
-import sys
 from InputHandler import InputHandler
 import warnings
 import box
@@ -43,12 +42,19 @@ class BearBox:
         # load and set the logo
         self.start = Title()
         y = False
+
+        # Title Screen
         while not(self.start.confirm) and not y:
-            self.start.checkPress()
-            self.start.render()
-            pygame.display.flip()
-            if (BearBox.shouldQuit()):
-                y = True
+                if pygame.event.get(pygame.VIDEORESIZE):
+                    newSize = pygame.display.get_surface().get_size()
+                    if newSize:
+                        pygame.display.set_mode(newSize, pygame.RESIZABLE)
+                        self.start.update_location(newSize)
+                self.start.checkPress()
+                self.start.render()
+                pygame.display.flip()
+                if (BearBox.shouldQuit()):
+                    y = True
 
             
         
