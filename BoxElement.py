@@ -16,20 +16,29 @@ class BoxElement:
         """Represents a component, like a latch or lock, of a Box.
 
         Args:
-            boxNumber (int): The box that this element 
-            elementName (str): _description_
-            parent (box.Box): _description_
-            offset (tuple[int, int], optional): _description_. Defaults to (0, 0).
-            scale (tuple[int, int], optional): _description_. Defaults to (100, 100).
+            boxNumber (int): The box that this element belongs to.
+            elementName (str): The name of this element as it appears in the assets folsder.
+            parent (box.Box): The Box this element belongs to.
+            offset (tuple[int, int], optional): The of the element, from the center of its parent box. Defaults to (0, 0).
+            scale (tuple[int, int], optional): The size of the element's bounding box. Defaults to (100, 100).
         """
+
+        # The path to the box's sprites
         self.spritePath = "assets/box_" + str(boxNumber) + "/" + elementName + ".png"
         self.hurt = "assets/box_" + str(boxNumber) + "/" + elementName + "_damage.png"
+
+        # The size of the element's bounding box
         self.scale = scale
+
+        # The offset of the element, from the center of its parent box.
         self.offsetX = offset[0]
         self.offsetY = offset[1]
+
         self.rotation = 0
         self.parent = parent
         self.health = 20
+
+        # Whether damage was taken since the last frame
         self.taken = False
 
     def update(self):
@@ -41,7 +50,16 @@ class BoxElement:
             self.health -= 1
             self.taken = True
 
-    def click(self, positionX, positionY):
+    def click(self, positionX: int, positionY: int) -> bool:
+        """Checks whether a given click lands inside this element and performs this element's onClick actions as needed.
+
+        Args:
+            positionX (int): The x position of the click
+            positionY (int): The y position of the click
+
+        Returns:
+            bool: Whether the click falls within this element's bounding box.
+        """
         rads = radians(self.rotation)
 
         screenSizeScale = (
@@ -51,7 +69,7 @@ class BoxElement:
 
         scale = (
             pygame.display.get_window_size()[0]/800 * self.scale[0],
-            pygame.display.get_window_size()[0]/600 * self.scale[1]
+            pygame.display.get_window_size()[1]/600 * self.scale[1]
         )
         
         # The elements may be offset and rotated from (0,0). Instead of trying to figure out if the click point is in that bounding box directly, we instead
@@ -86,6 +104,7 @@ class BoxElement:
         else:
             sprite = pygame.image.load(self.spritePath)
     
+        # Scale and rotate the sprite
         sprite = pygame.transform.scale(sprite, (screenSizeScale[0] * self.scale[0], screenSizeScale[1] * self.scale[1]))
         sprite = pygame.transform.rotate(sprite, self.rotation)
         spriteRect = sprite.get_rect()
@@ -95,6 +114,7 @@ class BoxElement:
         parentXRange  = self.parent.getScaledXRange()
         parentYRange  = self.parent.getScaledYRange()
 
+        # Translate the sprite based on its parent's current position and its own offset and rotation.
         spriteRect.centerx = parentXRange[0] + (parentXRange[1] - parentXRange[0])/2 + screenSizeScale[1]*self.offsetY * sin(rads) + screenSizeScale[0]*self.offsetX * cos(rads)
         spriteRect.centery = parentYRange[0] + (parentYRange[1] - parentYRange[0])/2 - screenSizeScale[0]*self.offsetX * sin(rads) + screenSizeScale[1]*self.offsetY * cos(rads)
 

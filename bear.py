@@ -50,7 +50,7 @@ class BearBox:
         gamerun = False
 
             
-        while not BearBox.shouldQuit():   
+        while not BearBox.shouldQuit():
             # Title Screen 
             self.start = Title()
             self.start.render()
@@ -96,16 +96,27 @@ class BearBox:
                     if self.activeBox.contains(inputHandler.dragStartPos[0], inputHandler.dragStartPos[1]):
                         print("Roll")
                         self.activeBox.roll(inputHandler.isCounterClockwiseCircle)
+                        self.activeBox.damage()
+                        self.activeBox.damage()
+                        self.activeBox.damage()
+                        self.activeBox.damage()
                     inputHandler.restartDrag()
 
                 if inputHandler.hasDoneBounce():
                     print("BOUNCE COMPLETE!")
+                    self.activeBox.bounce()
+                    self.activeBox.damage()
+                    for element in self.activeBox.elements:
+                        element.damage()
                     inputHandler.restartDrag()
 
                 clickPostion = inputHandler.consumeClick()
                 if not (clickPostion is None):
                     print(f"Player clicked at {clickPostion}")
                     self.activeBox.click(clickPostion[0], clickPostion[1])
+
+                if inputHandler.consumeSpace():
+                    print("Space!")
 
 
                 #Global health calculation

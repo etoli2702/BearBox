@@ -93,6 +93,7 @@ class InputHandler:
         # If the distance between the current mouse position and where it started is less
         hasMouseReturnedToStartPosition = Vector2(mouse.get_pos()[0] - self.dragStartPos[0], mouse.get_pos()[1] - self.dragStartPos[1]).length() <= MAX_MOUSE_POSITION_DISTANCE
 
+        # Whether the diameter of the bounding box of the path the mouse took is greater than the required distance
         hasMouseLeftStartPosition = Vector2(self.dragBoundingBox[0] - self.dragBoundingBox[2], self.dragBoundingBox[1] - self.dragBoundingBox[3]).length() >= REQUIRED_DISTANCE_FOR_CIRCLE
 
         return hasMouseLeftStartPosition and hasMouseReturnedToStartPosition
@@ -104,6 +105,7 @@ class InputHandler:
         # If the mouse is lower than where the bounce started.
         hasMouseReturnedToStartPosition = self.dragStartPos[1] < mouse.get_pos()[1]
 
+        # Whether the height of the bounding box of the path the mouse took is greater than the required distance
         hasMouseLeftStartPosition = self.dragBoundingBox[3] - self.dragBoundingBox[1] >= REQUIRED_DISTANCE_FOR_CIRCLE
 
         return hasMouseLeftStartPosition and hasMouseReturnedToStartPosition
