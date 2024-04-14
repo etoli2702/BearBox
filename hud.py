@@ -7,7 +7,8 @@ Purpose: Render the healthbar.
 '''
 import pygame
 from bear import getScreen
-
+import time
+from math import floor
 
 class Healthbar:
     def __init__(self):
@@ -31,22 +32,19 @@ class Healthbar:
 
 class Timers:
     def __init__ (self):
+        # In secs
         self.elapsed_time = 0
         self.running = False
         self.sec = 0
         self.min = 0
-        self.start = 0
+        # In secs
+        self.start = time.process_time()
 
-    def update (self, game_time):
-        self.elapsed_time = game_time - self.start
+    def update (self):
+        self.elapsed_time = (time.process_time() - self.start)
         
-        if(self.elapsed_time % 10 == 0):
-            self.start += 10
-            if self.sec == 60:
-                self.min += 1
-                self.sec = 1
-            else:
-                self.sec += 1
+        self.sec = round(self.elapsed_time)
+        self.min = floor(self.elapsed_time / 60)
 
     def render(self):
         font = pygame.font.Font('ps2p.ttf', 32)        

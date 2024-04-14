@@ -135,8 +135,9 @@ class BearBox:
                     self.wins()
                     self.startFromTitle()
 
+                self.timer.update()
                 self.activeBox.update()
-                self.render(global_health)
+                self.render()
     
     def title(self):
         while not(self.start.confirm) and not BearBox.shouldQuit():
@@ -152,7 +153,7 @@ class BearBox:
                         pygame.quit()
                         return
 
-    def render(self, global_health):
+    def render(self):
         background = pygame.image.load("assets/background.png")
         background = pygame.transform.scale(background, pygame.display.get_window_size())
 
@@ -160,6 +161,12 @@ class BearBox:
 
         self.activeBox.render()
         self.timer.render()
+
+        #Global health calculation
+        i = self.activeBox.health
+        for element in self.activeBox.elements:
+            i += element.health
+        global_health = i
         self.activeHud.render(global_health)
 
         pygame.display.flip()
