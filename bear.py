@@ -88,6 +88,7 @@ class BearBox:
                 print(f"Player clicked at {clickPostion}")
                 self.activeBox.click(clickPostion[0], clickPostion[1])
 
+            #Global health calculation
             i = self.activeBox.health
             for element in defaultElements:
                 i += element.health
