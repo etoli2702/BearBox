@@ -86,6 +86,7 @@ class BearBox:
             self.activeBox.action()
             self.activeHud = Healthbar()
             self.timer = Timers()
+            pounce = 2
 
 
             inputHandler = InputHandler()        
@@ -122,7 +123,9 @@ class BearBox:
 
                 if inputHandler.consumeSpace():
                     print("Space!")
-
+                    pounce = 4
+                    self.activeBox.damage()
+                    element.damage()
 
                 #Global health calculation
                 i = self.activeBox.health
@@ -137,7 +140,8 @@ class BearBox:
 
                 self.timer.update()
                 self.activeBox.update()
-                self.render()
+                self.render(pounce)
+                pounce = 2
     
     def title(self):
         while not(self.start.confirm) and not BearBox.shouldQuit():
@@ -153,7 +157,7 @@ class BearBox:
                         pygame.quit()
                         return
 
-    def render(self):
+    def render(self, pounce):
         background = pygame.image.load("assets/background.png")
         background = pygame.transform.scale(background, pygame.display.get_window_size())
 
@@ -161,6 +165,18 @@ class BearBox:
 
         self.activeBox.render()
         self.timer.render()
+
+        #''' # Bear function
+
+        screen = getScreen()
+        windowSize = pygame.display.get_window_size()
+
+        p = pygame.image.load("assets/bear.png")
+
+        p = pygame.transform.scale(p, (windowSize[0] / 1, windowSize[1] / 1))
+        screen.blit(p, (windowSize[0] / 300, windowSize[1] / pounce))
+        
+        #'''
 
         #Global health calculation
         i = self.activeBox.health
@@ -171,7 +187,7 @@ class BearBox:
 
         pygame.display.flip()
         pygame.time.Clock().tick(60)
-
+        
     def wins(self):
         # Render win screen
         win = True
