@@ -1,3 +1,11 @@
+'''
+Author: Elijah
+Date: 04/13/2024
+Project: Hack KU - Bear Box
+Last modified: 04/13/2024
+Purpose: Start menu.
+'''
+
 import pygame
 from bear import getScreen
 
@@ -49,16 +57,20 @@ class Title:
                 self.buttons[0]["confirm"] = True
                 self.confirm = True
                 self.choice = 0
+                return 2
             elif self.buttons[1]["isPress"]:
                 self.buttons[1]["isPress"] = False
                 self.buttons[1]["confirm"] = True
                 self.confirm = True
                 self.choice = 1
+                return 1
             elif self.buttons[2]["isPress"]:
                 self.buttons[2]["isPress"] = False
                 self.buttons[2]["confirm"] = True
                 self.confirm = True
                 self.choice = 2
+                return 0
+           
 
 
 

@@ -1,23 +1,26 @@
+'''
+Author: Chris, Elijah, Sasha
+Date: 04/13/2024
+Project: Hack KU - Bear Box
+Last modified: 04/13/2024
+Purpose: Host main and run loop.
+'''
+
 import pygame
 from InputHandler import InputHandler
 import warnings
 import box
 import BoxElement
-stage = 2
 
 # Suppress libpng warning
 warnings.filterwarnings("ignore", category=UserWarning, message="iCCP")
 
-
 def getScreen():
     return BearBox.screen
 
-import box
+# Introduced later to avoid circular imports
 from hud import Healthbar 
-from hud import Timers 
-
-import box
-import BoxElement
+from hud import Timers
 from start import Title
 
 # define a main function
@@ -60,7 +63,7 @@ class BearBox:
                     if newSize:
                         pygame.display.set_mode(newSize, pygame.RESIZABLE)
                         self.start.update_location(newSize)
-                self.start.checkPress()
+                stage = self.start.checkPress()
                 self.start.render()
                 pygame.display.flip()
             
@@ -72,11 +75,7 @@ class BearBox:
             else:
                 pygame.quit()
                              
-
-                    
-
-                
-            
+            # build boxes
             defaultElements = [BoxElement.BoxElement(stage, "latch_left", None, (-110, -87), (55, 110)),
                             BoxElement.BoxElement(stage, "latch_right", None, (110, -87), (55, 110))]
             self.activeBox = box.Box(stage=stage, elements=defaultElements)
@@ -116,13 +115,11 @@ class BearBox:
                 global_health = i
                 if global_health == 0:
                     gamerun = False
+                    # Win screen
+                    self.wins()
 
                 self.activeBox.update()
                 self.render(global_health)
-
-
-            # Win screen
-            self.wins()
 
 
         pygame.quit()

@@ -1,3 +1,11 @@
+'''
+Author: Chris
+Date: 04/13/2024
+Project: Hack KU - Bear Box
+Last modified: 04/14/2024
+Purpose: Build the box.
+'''
+
 import pygame
 import bear
 import BoxElement
@@ -131,7 +139,8 @@ class Box:
         screen.blit(p, spriteRect)
 
         for element in self.elements:
-            element.render()
+            if element.health > 0:
+                element.render()
 
         
 

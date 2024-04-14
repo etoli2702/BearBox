@@ -1,3 +1,11 @@
+'''
+Author: Chris
+Date: 04/13/2024
+Project: Hack KU - Bear Box
+Last modified: 04/14/2024
+Purpose: Build the box elements.
+'''
+
 import pygame
 import bear
 from math import sin, cos, radians
@@ -77,17 +85,17 @@ class BoxElement:
             self.taken = False
         else:
             sprite = pygame.image.load(self.spritePath)
-        if self.health >= 0:
-            sprite = pygame.transform.scale(sprite, (screenSizeScale[0] * self.scale[0], screenSizeScale[1] * self.scale[1]))
-            sprite = pygame.transform.rotate(sprite, self.rotation)
-            spriteRect = sprite.get_rect()
+    
+        sprite = pygame.transform.scale(sprite, (screenSizeScale[0] * self.scale[0], screenSizeScale[1] * self.scale[1]))
+        sprite = pygame.transform.rotate(sprite, self.rotation)
+        spriteRect = sprite.get_rect()
 
-            rads = radians(self.rotation)
+        rads = radians(self.rotation)
 
-            parentXRange  = self.parent.getScaledXRange()
-            parentYRange  = self.parent.getScaledYRange()
+        parentXRange  = self.parent.getScaledXRange()
+        parentYRange  = self.parent.getScaledYRange()
 
-            spriteRect.centerx = parentXRange[0] + (parentXRange[1] - parentXRange[0])/2 + screenSizeScale[1]*self.offsetY * sin(rads) + screenSizeScale[0]*self.offsetX * cos(rads)
-            spriteRect.centery = parentYRange[0] + (parentYRange[1] - parentYRange[0])/2 - screenSizeScale[0]*self.offsetX * sin(rads) + screenSizeScale[1]*self.offsetY * cos(rads)
+        spriteRect.centerx = parentXRange[0] + (parentXRange[1] - parentXRange[0])/2 + screenSizeScale[1]*self.offsetY * sin(rads) + screenSizeScale[0]*self.offsetX * cos(rads)
+        spriteRect.centery = parentYRange[0] + (parentYRange[1] - parentYRange[0])/2 - screenSizeScale[0]*self.offsetX * sin(rads) + screenSizeScale[1]*self.offsetY * cos(rads)
 
-            screen.blit(sprite, spriteRect)
+        screen.blit(sprite, spriteRect)

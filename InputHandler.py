@@ -1,3 +1,11 @@
+'''
+Author: Chris
+Date: 04/13/2024
+Project: Hack KU - Bear Box
+Last modified: 04/14/2024
+Purpose: Interpret user input.
+'''
+
 import pygame
 from pygame.math import Vector2
 import pygame.mouse as mouse
