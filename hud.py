@@ -44,6 +44,8 @@ class Timers:
         self.elapsed_time = (time.process_time() - self.start)
         
         self.sec = round(self.elapsed_time)
+        if self.sec >= 60:
+            self.sec -= 60
         self.min = floor(self.elapsed_time / 60)
 
     def render(self):
