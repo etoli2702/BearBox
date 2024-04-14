@@ -15,8 +15,9 @@ class Healthbar:
     def currentHealth(self, global_health):
         """Return a list of assests that need to be rendered in the healthbar."""
         healthbar = list()
-        for num in range(8, global_health // 10, -1):
-            healthbar.append(f"assets/healthbar/food_{num}.png")
+        for num in range(8, (global_health + 9) // 10, -1):
+            if num > 0:
+                healthbar.append(f"assets/healthbar/food_{num}.png")
         return(healthbar)
         
     def render(self, global_health):
