@@ -1,39 +1,66 @@
 import pygame
 from bear import getScreen
-import warnings
-
-# Suppress libpng warning
-warnings.filterwarnings("ignore", category=UserWarning, message=".*iCCP.*")
 
 class Title:
     def __init__(self):
-        self.visible = True
-        self.menu = "assets/white.png"
-        self.button = "assets/start.png"
-        self.press = "assets/start2.png"
-        self.isPress = False
         self.confirm = False
-        self.location = [330,500,450,545] 
+        self.choice = 0
+        self.buttons = [
+            {"button": "assets/stage1.png", "press": "assets/stage1p.png", "isPress": False, "confirm": False,
+             "location": [100, 400, 300, 600]},
+            {"button": "assets/stage2.png", "press": "assets/stage2p.png", "isPress": False, "confirm": False,
+             "location": [330, 400, 530, 600]},
+            {"button": "assets/exit.png", "press": "assets/exitp.png", "isPress": False, "confirm": False,
+             "location": [560, 400, 760, 600]}
+        ]
 
     def update_location(self, window_size):
         # Update self.location based on the new window size
         if window_size:
-            self.location = [window_size[0] / 2.43, window_size[1] / 1.2, window_size[0] / 1.78, window_size[0] / 1.1]
-    
+            for button in self.buttons:
+                button_width = window_size[0] / 2.43
+                button_height = window_size[1] / 1.2
+                button[0] = button_width  
+                button[2] = button_width + 120 
+                button[1] = button_height  
+                button[3] = button_height + 45 
+            
     def checkPress(self):
         mouse = pygame.mouse.get_pos()
-        print(mouse)
         for event in pygame.event.get():
-            if (event.type == pygame.MOUSEBUTTONDOWN):
-                if (self.location[0] < mouse[0] < self.location[2] and self.location[1] < mouse[1] < self.location[3]):
-                    self.isPress = True
-            elif(event.type == pygame.MOUSEMOTION):
-                if (self.location[0] > mouse[0] or mouse[0] > self.location[2] 
-                    or self.location[1] > mouse[1] or mouse[1] > self.location[3]):
-                    self.isPress = False
-            elif(self.isPress):
-                self.isPress = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if (self.buttons[0]["location"][0] < mouse[0] < self.buttons[0]["location"][2] and self.buttons[0]["location"][1] < mouse[1] < self.buttons[0]["location"][3]):
+                    self.buttons[0]["isPress"] = True
+                elif (self.buttons[1]["location"][0] < mouse[0] < self.buttons[1]["location"][2] and self.buttons[1]["location"][1] < mouse[1] < self.buttons[1]["location"][3]):
+                    self.buttons[1]["isPress"] = True
+                elif (self.buttons[2]["location"][0] < mouse[0] < self.buttons[2]["location"][2] and self.buttons[2]["location"][1] < mouse[1] < self.buttons[2]["location"][3]):
+                    self.buttons[2]["isPress"] = True    
+            elif event.type == pygame.MOUSEMOTION:
+                if not (self.buttons[0]["location"][0] < mouse[0] < self.buttons[0]["location"][2] and self.buttons[0]["location"][1] < mouse[1] < self.buttons[0]["location"][3]):
+                    self.buttons[0]["isPress"] = False
+                elif not(self.buttons[1]["location"][0] < mouse[0] < self.buttons[1]["location"][2] and self.buttons[1]["location"][1] < mouse[1] < self.buttons[1]["location"][3]):
+                    self.buttons[1]["isPress"] = False
+                elif not(self.buttons[2]["location"][0] < mouse[0] < self.buttons[2]["location"][2] and self.buttons[2]["location"][1] < mouse[1] < self.buttons[2]["location"][3]):
+                    self.buttons[2]["isPress"] = False 
+
+
+            elif self.buttons[0]["isPress"]:
+                self.buttons[0]["isPress"] = False
+                self.buttons[0]["confirm"] = True
                 self.confirm = True
+                self.choice = 0
+            elif self.buttons[1]["isPress"]:
+                self.buttons[1]["isPress"] = False
+                self.buttons[1]["confirm"] = True
+                self.confirm = True
+                self.choice = 1
+            elif self.buttons[2]["isPress"]:
+                self.buttons[2]["isPress"] = False
+                self.buttons[2]["confirm"] = True
+                self.confirm = True
+                self.choice = 2
+
+
 
                 
 
@@ -43,15 +70,14 @@ class Title:
         windowSize = pygame.display.get_window_size()
         screen.blit(pygame.image.load("assets/background.png"), (0,0))
         
-        if (self.isPress):
-            p = pygame.image.load(self.press)
+        for button in self.buttons:
+            if button["isPress"]:  # Check if the button is pressed
+                button_image = pygame.image.load(button["press"])  # Load the pressed button image
+            else:
+                button_image = pygame.image.load(button["button"])  # Load the normal button image
             
-        else:
-            p = pygame.image.load(self.button)
+            # Scale the button image based on the difference between the x-coordinates and y-coordinates of the button's location list
+            button_image = pygame.transform.scale(button_image, (int(button["location"][2] - button["location"][0]), int(button["location"][3] - button["location"][1])))
             
-        p = pygame.transform.scale(p, (windowSize[0] / 4, windowSize[1] / 3))
-        screen.blit(p, (windowSize[0] / 2.75, windowSize[1] / 1.5))
-
-
-            
-
+            # Blit the button image onto the screen at the appropriate position specified by the button's location list
+            screen.blit(button_image, (button["location"][0], button["location"][1]))
