@@ -13,7 +13,8 @@ def getScreen():
     return BearBox.screen
 
 import box
-from hud import Healthbar
+from hud import Healthbar 
+from hud import Timers 
 
 import box
 import BoxElement
@@ -32,6 +33,7 @@ class BearBox:
         self.activeBox: box.Box
         self.activeHud = Healthbar
         self.start = Title
+        self.timer = Timers
 
     def run(self):
         # initialize the pygame module
@@ -42,10 +44,10 @@ class BearBox:
         pygame.time.Clock().tick(60)
         # load and set the logo
         self.start = Title()
-        gamerun = False
+        gamerun = True
 
         # Title Screen
-        while not(self.start.confirm) and not gamerun:
+        while not(self.start.confirm) and gamerun:
                 if pygame.event.get(pygame.VIDEORESIZE):
                     newSize = pygame.display.get_surface().get_size()
                     if newSize:
@@ -63,11 +65,10 @@ class BearBox:
         self.activeBox = box.Box(stage=stage, elements=defaultElements)
         self.activeBox.action()
         self.activeHud = Healthbar()
+        self.timer = Timers()
 
 
-
-        inputHandler = InputHandler()
-        
+        inputHandler = InputHandler()        
         # main loop
         while (not BearBox.shouldQuit()) and gamerun:
             inputHandler.update()
@@ -95,6 +96,7 @@ class BearBox:
                 print(f"Player clicked at {clickPostion}")
                 self.activeBox.click(clickPostion[0], clickPostion[1])
 
+
             #Global health calculation
             i = self.activeBox.health
             for element in defaultElements:
@@ -105,20 +107,23 @@ class BearBox:
                 gamerun = False
 
             self.activeBox.update()
-            self.render(global_health)
+            self.render(global_health, gamerun)
 
         pygame.quit()
 
-    def render(self, global_health):
+    def render(self, global_health, gamerun):
         background = pygame.image.load("assets/background.png")
         background = pygame.transform.scale(background, pygame.display.get_window_size())
 
         BearBox.screen.blit(background, (0,0))
-
-        self.activeBox.render()
-        self.activeHud.render(global_health)
+        
+        if gamerun:
+            self.activeBox.render()
+            self.activeHud.render(global_health)
+        #Call the end screen/menu/level picker?
 
         pygame.display.flip()
+        pygame.time.Clock().tick(60)
 
     @staticmethod
     def shouldQuit():
