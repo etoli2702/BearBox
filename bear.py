@@ -13,7 +13,8 @@ def getScreen():
     return BearBox.screen
 
 import box
-from hud import Healthbar
+from hud import Healthbar 
+from hud import Timers 
 
 import box
 import BoxElement
@@ -32,6 +33,7 @@ class BearBox:
         self.activeBox: box.Box
         self.activeHud = Healthbar
         self.start = Title
+        self.timer = Timers
 
     def run(self):
         # initialize the pygame module
@@ -64,11 +66,10 @@ class BearBox:
         self.activeBox = box.Box(stage=stage, elements=defaultElements)
         self.activeBox.action()
         self.activeHud = Healthbar()
+        self.timer = Timers()
 
 
-
-        inputHandler = InputHandler()
-        
+        inputHandler = InputHandler()        
         # main loop
         while not BearBox.shouldQuit() and gamerun:
             inputHandler.update()
@@ -87,6 +88,7 @@ class BearBox:
             if not (clickPostion is None):
                 print(f"Player clicked at {clickPostion}")
                 self.activeBox.click(clickPostion[0], clickPostion[1])
+
 
             #Global health calculation
             i = self.activeBox.health
@@ -113,6 +115,7 @@ class BearBox:
         #Call the end screen/menu/level picker?
 
         pygame.display.flip()
+        pygame.time.Clock().tick(60)
 
     @staticmethod
     def shouldQuit():
