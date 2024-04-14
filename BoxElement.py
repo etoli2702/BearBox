@@ -15,6 +15,7 @@ class BoxElement:
             scale (tuple[int, int], optional): _description_. Defaults to (100, 100).
         """
         self.spritePath = "assets/box_" + str(boxNumber) + "/" + elementName + ".png"
+        self.hurt = "assets/box_" + str(boxNumber) + "/" + elementName + "_damage.png"
         self.scale = scale
         self.offsetX = offset[0]
         self.offsetY = offset[1]
@@ -69,17 +70,22 @@ class BoxElement:
             pygame.display.get_window_size()[1]/600
         )
         screen = bear.getScreen()
-        sprite = pygame.image.load(self.spritePath)
-        sprite = pygame.transform.scale(sprite, (screenSizeScale[0] * self.scale[0], screenSizeScale[1] * self.scale[1]))
-        sprite = pygame.transform.rotate(sprite, self.rotation)
-        spriteRect = sprite.get_rect()
+        if self.taken:
+            sprite = pygame.image.load(self.hurt)
+            self.taken = False
+        else:
+            sprite = pygame.image.load(self.spritePath)
+        if self.health >= 0:
+            sprite = pygame.transform.scale(sprite, (screenSizeScale[0] * self.scale[0], screenSizeScale[1] * self.scale[1]))
+            sprite = pygame.transform.rotate(sprite, self.rotation)
+            spriteRect = sprite.get_rect()
 
-        rads = radians(self.rotation)
+            rads = radians(self.rotation)
 
-        parentXRange  = self.parent.getScaledXRange()
-        parentYRange  = self.parent.getScaledYRange()
+            parentXRange  = self.parent.getScaledXRange()
+            parentYRange  = self.parent.getScaledYRange()
 
-        spriteRect.centerx = parentXRange[0] + (parentXRange[1] - parentXRange[0])/2 + screenSizeScale[1]*self.offsetY * sin(rads) + screenSizeScale[0]*self.offsetX * cos(rads)
-        spriteRect.centery = parentYRange[0] + (parentYRange[1] - parentYRange[0])/2 - screenSizeScale[0]*self.offsetX * sin(rads) + screenSizeScale[1]*self.offsetY * cos(rads)
+            spriteRect.centerx = parentXRange[0] + (parentXRange[1] - parentXRange[0])/2 + screenSizeScale[1]*self.offsetY * sin(rads) + screenSizeScale[0]*self.offsetX * cos(rads)
+            spriteRect.centery = parentYRange[0] + (parentYRange[1] - parentYRange[0])/2 - screenSizeScale[0]*self.offsetX * sin(rads) + screenSizeScale[1]*self.offsetY * cos(rads)
 
-        screen.blit(sprite, spriteRect)
+            screen.blit(sprite, spriteRect)
