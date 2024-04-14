@@ -41,9 +41,9 @@ class BearBox:
     def run(self):
         # initialize the pygame module
         pygame.init()
-        logo = pygame.image.load("assets/background.png")
+        logo = pygame.image.load("assets/box_2/box_2.png")
         pygame.display.set_icon(logo)
-        pygame.display.set_caption("test")
+        pygame.display.set_caption("BearBox")
         pygame.time.Clock().tick(60)
         
         self.startFromTitle()
