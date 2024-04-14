@@ -20,6 +20,7 @@ class BoxElement:
         self.offsetY = offset[1]
         self.rotation = 0
         self.parent = parent
+        self.health = 20
 
     def update(self):
         pass

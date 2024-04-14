@@ -26,7 +26,7 @@ class Healthbar:
         for index, item in enumerate(healthbar):
             image = pygame.image.load(item)
             image = pygame.transform.scale(image, (int(windowSize[0] / 12), int(windowSize[1] / 12)))  
-            screen.blit(image, ((10 + index * 60)*windowSize[0]/800, 50 * windowSize[1]/600))
+            screen.blit(image, ((10 + index * 60)*windowSize[0]/800, 20 * windowSize[1]/600))
 
 class Timer:
     def __init___ (self):

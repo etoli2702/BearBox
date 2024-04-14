@@ -7,7 +7,7 @@ ROLL_FRAMES = 60
 class Box:
     def __init__(self, stage = 1, boxSize = [200,150,600,450], elements: list[BoxElement.BoxElement] = []):
         self.face = "front"
-        self.health = 100
+        self.health = 40
         self.image = "assets/box_" + str(stage) + "/box_" + str(stage) + ".png"
         self.hurt = "assets/box_" + str(stage) + "/box_" + str(stage) + "_damage.png"
         self.xRange = [boxSize[0],boxSize[2]]
