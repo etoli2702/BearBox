@@ -1,6 +1,5 @@
 # BearBox
-Written in python
-Requires pygame (from the command prompt run pip install pygame)
+Written in python | Requires pygame (from the command prompt run pip install pygame)
 
 [Planning Document](https://docs.google.com/document/d/1rtg9Jhf5TqfhTUPTfvigeBtKigOFr7ZMfYUXiAdAxsw/edit?usp=sharing)
 
